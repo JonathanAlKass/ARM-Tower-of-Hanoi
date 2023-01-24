@@ -152,7 +152,7 @@ int main() {
     int amount = 2;
     int start = 0;
     int MOVEMENT_SPEED_INDEX = 0;
-    int speeds[] = {3, 5, 10, 15, 20};
+    int speeds[] = {20, 15, 10, 5, 3};
     int MOVEMENT_SPEED = speeds[0];
 
 
@@ -280,14 +280,14 @@ int main() {
             }
         }
         
-        //amountLeds = binary(amount);
+        amountLeds = binary(amount);
 
         //sleep(MOVEMENT_SPEED);
         sleep(6);
         //speedLED = !speedLED;
 
     }
-
+    amountLeds = binary(0);
     speedLED = 0;
 
     for (int i = 0; i < 5; i++) {
@@ -314,6 +314,7 @@ int main() {
     }*/
 
     while (true) {
+        amountLeds = binary(10);
         ledsFrom = 0b000;
         ledsTo = 0b000;
         ThisThread::sleep_for(BLINKING_RATE);

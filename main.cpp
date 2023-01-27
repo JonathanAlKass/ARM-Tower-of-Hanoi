@@ -6,7 +6,7 @@
 
 #define BLINKING_RATE 300ms
 #define MIN_SLICES 2
-#define MAX_SLICES 5
+#define MAX_SLICES 10
 // main() runs in its own thread in the OS
 
 
@@ -149,177 +149,85 @@ void moveHanoi(int numSlabs, int from, int over, int to, int speed, double count
 
 
 int main() {
-    int amount = 2;
-    int start = 0;
-    int MOVEMENT_SPEED_INDEX = 0;
-    int speeds[] = {20, 15, 10, 5, 3};
-    int MOVEMENT_SPEED = speeds[0];
+    while (true) {
+        int amount = 2;
+        int start = 0;
+        int MOVEMENT_SPEED_INDEX = 0;
+        int speeds[] = {20, 15, 10, 5, 3, 1};
+        int MOVEMENT_SPEED = speeds[0];
 
 
-    sleep(5);
+        sleep(5);
 
-    /*int data[] = {0b100000,
-                    0b100100,
 
-                    0b100000,
-                    0b100001,
+        
+        amountLeds = binary(0);
+        while (start == 0) {
+            sevenDigit = sevenDigitBinary(MOVEMENT_SPEED_INDEX+1);
+            if(amountPin == 1){
+                if(amount == 5){
+                    sleep(5);
+                    if(amountPin == 1){
+                        amount++;
+                    }
+                }else{
+                    amount++;
+                }
+                if (amount > MAX_SLICES) {
+                    amount = MIN_SLICES;
+                }
+            }
+            if(speedPin == 1){
+                MOVEMENT_SPEED_INDEX += 1;
+                if(MOVEMENT_SPEED_INDEX > 5){
+                    MOVEMENT_SPEED_INDEX = 0;
+                }
+                MOVEMENT_SPEED = speeds[MOVEMENT_SPEED_INDEX];
+                sevenDigit = sevenDigitBinary(MOVEMENT_SPEED_INDEX+1);
+            }
+            if(startPin == 1){
+                sleep(5);
+                start2 = 1;
+                if(startPin == 1){
+                    start = 1;
 
-                    0b001000,
-                    0b001001,
+                }
+            }
+            
+            amountLeds = binary(amount);
 
-                    0b100000,
-                    0b100100,
+            sleep(4);
 
-                    0b000010,
-                    0b010010,
+        }
+        amountLeds = binary(0);
+        speedLED = 0;
 
-                    0b000010,
-                    0b000110,
-
-                    0b100000,
-                    0b100100,
-
-                    0b100000,
-                    0b100001,
-
-                    0b001000,
-                    0b001001,
-
-                    0b001000,
-                    0b011000,
-
-                    0b000010,
-                    0b010010,
-
-                    0b001000,
-                    0b001001,
-
-                    0b100000,
-                    0b100100,
-
-                    0b100000,
-                    0b100001,
-
-                    0b001000,
-                    0b001001,
-
-                    0b100000,
-                    0b100100,
-
-                    0b000010,
-                    0b010010,
-
-                    0b000010,
-                    0b000110,
-
-                    0b100000,
-                    0b100100,
-
-                    0b000010,
-                    0b010010,
-
-                    0b001000,
-                    0b001001,
-
-                    0b001000,
-                    0b011000,
-
-                    0b000010,
-                    0b010010,
-
-                    0b000010,
-                    0b000110,
-
-                    0b100000,
-                    0b100100,
-
-                    0b100000,
-                    0b100001,
-
-                    0b001000,
-                    0b001001,
-
-                    0b100000,
-                    0b100100,
-
-                    0b000010,
-                    0b010010,
-
-                    0b000010,
-                    0b000110,
-
-                    0b100000,
-                    0b100100
-
-    };*/
+        for (int i = 0; i < 5; i++) {
+            ledsFrom = 0b000;
+            ledsTo = 0b000;
+            ThisThread::sleep_for(BLINKING_RATE);
+            ledsFrom = 0b111;
+            ledsTo = 0b111;
+            ThisThread::sleep_for(BLINKING_RATE);
+        }
+        int count = pow(2, amount);
+        moveHanoi(amount, 1, 3, 2, MOVEMENT_SPEED, count);
 
     
-    amountLeds = binary(0);
-    sevenDigitBinary(1);
-    while (start == 0) {
-        if(amountPin == 1){
-            amount++;
-            if (amount > MAX_SLICES) {
-                amount = MIN_SLICES;
-            }
-        }
-        if(speedPin == 1){
-            MOVEMENT_SPEED_INDEX += 1;
-            if(MOVEMENT_SPEED_INDEX > 4){
-                MOVEMENT_SPEED_INDEX = 0;
-            }
-            sevenDigit = sevenDigitBinary(MOVEMENT_SPEED_INDEX+1);
-            MOVEMENT_SPEED = speeds[MOVEMENT_SPEED_INDEX];
-        }
-        if(startPin == 1){
-            sleep(5);
-            start2 = 1;
-            if(startPin == 1){
-                start = 1;
-
-            }
-        }
-        
-        amountLeds = binary(amount);
-
-        //sleep(MOVEMENT_SPEED);
-        sleep(6);
-        //speedLED = !speedLED;
-
-    }
-    amountLeds = binary(0);
-    speedLED = 0;
-
-    for (int i = 0; i < 5; i++) {
-        ledsFrom = 0b000;
-        ledsTo = 0b000;
-        ThisThread::sleep_for(BLINKING_RATE);
-        ledsFrom = 0b111;
-        ledsTo = 0b111;
-        ThisThread::sleep_for(BLINKING_RATE);
-    }
-    int count = pow(2, amount);
-    moveHanoi(amount, 1, 3, 2, MOVEMENT_SPEED, count);
-    /*int count = 0;
-    for (int i = 0; i < sizeof(data) / sizeof(int); i++) {
-        if (count == 2) {
-            ledsFrom = 0b000;
-        ledsTo = 0b000;
-            ThisThread::sleep_for(BLINKING_RATE);//sleep(MOVEMENT_SPEED);
-            count = 0;
-        }
-        leds = data[i];
-        ThisThread::sleep_for(BLINKING_RATE);//sleep(MOVEMENT_SPEED);
-        count++;
-    }*/
-
-    while (true) {
         amountLeds = binary(10);
+        for (int i = 0; i < 5; i++) {
+            ledsFrom = 0b000;
+            ledsTo = 0b000;
+            ThisThread::sleep_for(BLINKING_RATE);
+            ledsFrom = 0b010;
+            ledsTo = 0b010;
+            ThisThread::sleep_for(BLINKING_RATE);
+        }
         ledsFrom = 0b000;
         ledsTo = 0b000;
-        ThisThread::sleep_for(BLINKING_RATE);
-        ledsFrom = 0b010;
-        ledsTo = 0b010;
-        ThisThread::sleep_for(BLINKING_RATE);
+        amountLeds = binary(0);
+        sevenDigit = sevenDigitBinary(0);
+
+        ThisThread::sleep_for(5000ms);
     }
 }

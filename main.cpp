@@ -196,7 +196,7 @@ int main() {
                 sevenDigit = sevenDigitBinary(MOVEMENT_SPEED_INDEX+1);
                 if(amountPin == 1){
                     if(amount == 5){
-                        sleep(5);
+                        sleep(20);
                         if(amountPin == 1){
                             amount++;
                         }

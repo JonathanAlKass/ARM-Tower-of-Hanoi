@@ -17,7 +17,7 @@ BusOut amountLeds(PA_1, PA_4, PB_0, PC_1, PC_0, PC_10, PC_12, PA_13, PA_14, PA_1
 //                A     F     E      D     C     G     B
 BusOut sevenDigit(PA_9, PA_8, PB_10, PB_4, PB_5, PB_3, PA_10);
 
-DigitalOut speedLED(PB_2);
+DigitalIn modePin(PB_2);
 DigitalIn amountPin(PC_5);
 DigitalIn speedPin(PC_6);
 DigitalIn startPin(PA_12);
@@ -155,6 +155,7 @@ int main() {
         int MOVEMENT_SPEED_INDEX = 0;
         int speeds[] = {20, 15, 10, 5, 3, 1};
         int MOVEMENT_SPEED = speeds[0];
+        int mode = 0; //0: Hanoi     1: Knight Rider
 
 
         sleep(5);
@@ -190,7 +191,14 @@ int main() {
                 start2 = 1;
                 if(startPin == 1){
                     start = 1;
+        
+                }
+            }
 
+            if(modePin == 1){
+                mode++;
+                if(mode > 1){
+                    mode = 0;
                 }
             }
             
@@ -200,7 +208,6 @@ int main() {
 
         }
         amountLeds = binary(0);
-        speedLED = 0;
 
         for (int i = 0; i < 5; i++) {
             ledsFrom = 0b000;

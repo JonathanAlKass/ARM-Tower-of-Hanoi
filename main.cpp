@@ -6,7 +6,7 @@
 
 #define BLINKING_RATE 300ms
 #define MIN_SLICES 2
-#define MAX_SLICES 5
+#define MAX_SLICES 10
 // main() runs in its own thread in the OS
 
 
@@ -17,12 +17,11 @@ BusOut amountLeds(PA_1, PA_4, PB_0, PC_1, PC_0, PC_10, PC_12, PA_13, PA_14, PA_1
 //                A     F     E      D     C     G     B
 BusOut sevenDigit(PA_9, PA_8, PB_10, PB_4, PB_5, PB_3, PA_10);
 
-DigitalOut speedLED(PB_2);
+DigitalIn modePin(PB_2);
 DigitalIn amountPin(PC_5);
 DigitalIn speedPin(PC_6);
 DigitalIn startPin(PA_12);
 int RecursiveCount = 0;
-int start2 = 0;
 
 int progress = 0;
 
@@ -146,180 +145,214 @@ void moveHanoi(int numSlabs, int from, int over, int to, int speed, double count
 
 }
 
-
+void ledOn(int index){
+    switch(index){
+        case 0: 
+            ledsFrom = 0b100;
+            ledsTo = 0b100;
+            break;
+        case 1: 
+            ledsFrom = 0b010;
+            ledsTo = 0b010;
+            break;
+        case 2: 
+            ledsFrom = 0b001;
+            ledsTo = 0b001;
+            break;
+    }
+}
+void ledOff(){
+    ledsFrom = 0b000;
+    ledsTo = 0b000;
+}
 
 int main() {
-    int amount = 2;
-    int start = 0;
-    int MOVEMENT_SPEED_INDEX = 0;
-    int speeds[] = {20, 15, 10, 5, 3};
-    int MOVEMENT_SPEED = speeds[0];
+    while (true) {
+        //singleplayer
+        int amount = 2;
+        int start = 0;
+        int MOVEMENT_SPEED_INDEX = 0;
+        int speeds[] = {20, 15, 10, 5, 3, 1};
+        int MOVEMENT_SPEED = speeds[0];
+        int mode = 0; //0: Singleplayer     1: Multiplayer
 
 
-    sleep(5);
+        //multiplayer
+        int usercount = 2;
+        int users[] = {0, 0, 0};
+        int startmulti = 0;
+        sleep(5);
 
-    /*int data[] = {0b100000,
-                    0b100100,
 
-                    0b100000,
-                    0b100001,
+        
+        amountLeds = binary(0);
+        while (start == 0) {
 
-                    0b001000,
-                    0b001001,
 
-                    0b100000,
-                    0b100100,
+            if(mode == 0){ //singleplayer
 
-                    0b000010,
-                    0b010010,
 
-                    0b000010,
-                    0b000110,
+                
+                sevenDigit = sevenDigitBinary(MOVEMENT_SPEED_INDEX+1);
+                if(amountPin == 1){
+                    if(amount == 5){
+                        sleep(20);
+                        if(amountPin == 1){
+                            amount++;
+                        }
+                    }else{
+                        amount++;
+                    }
+                    if (amount > MAX_SLICES) {
+                        amount = MIN_SLICES;
+                    }
+                }
+                if(speedPin == 1){
+                    MOVEMENT_SPEED_INDEX += 1;
+                    if(MOVEMENT_SPEED_INDEX > 5){
+                        MOVEMENT_SPEED_INDEX = 0;
+                    }
+                    MOVEMENT_SPEED = speeds[MOVEMENT_SPEED_INDEX];
+                    sevenDigit = sevenDigitBinary(MOVEMENT_SPEED_INDEX+1);
+                }
 
-                    0b100000,
-                    0b100100,
 
-                    0b100000,
-                    0b100001,
 
-                    0b001000,
-                    0b001001,
+            }else if(mode == 1){ //multiplayer
 
-                    0b001000,
-                    0b011000,
+                amountLeds = binary(0);
 
-                    0b000010,
-                    0b010010,
-
-                    0b001000,
-                    0b001001,
-
-                    0b100000,
-                    0b100100,
-
-                    0b100000,
-                    0b100001,
-
-                    0b001000,
-                    0b001001,
-
-                    0b100000,
-                    0b100100,
-
-                    0b000010,
-                    0b010010,
-
-                    0b000010,
-                    0b000110,
-
-                    0b100000,
-                    0b100100,
-
-                    0b000010,
-                    0b010010,
-
-                    0b001000,
-                    0b001001,
-
-                    0b001000,
-                    0b011000,
-
-                    0b000010,
-                    0b010010,
-
-                    0b000010,
-                    0b000110,
-
-                    0b100000,
-                    0b100100,
-
-                    0b100000,
-                    0b100001,
-
-                    0b001000,
-                    0b001001,
-
-                    0b100000,
-                    0b100100,
-
-                    0b000010,
-                    0b010010,
-
-                    0b000010,
-                    0b000110,
-
-                    0b100000,
-                    0b100100
-
-    };*/
-
-    
-    amountLeds = binary(0);
-    sevenDigitBinary(1);
-    while (start == 0) {
-        if(amountPin == 1){
-            amount++;
-            if (amount > MAX_SLICES) {
-                amount = MIN_SLICES;
+                if(speedPin == 1){
+                    usercount += 1;
+                    if(usercount > 3){
+                        usercount = 2;
+                    }
+                    sevenDigit = sevenDigitBinary(usercount+1);
+                }
             }
-        }
-        if(speedPin == 1){
-            MOVEMENT_SPEED_INDEX += 1;
-            if(MOVEMENT_SPEED_INDEX > 4){
-                MOVEMENT_SPEED_INDEX = 0;
-            }
-            sevenDigit = sevenDigitBinary(MOVEMENT_SPEED_INDEX+1);
-            MOVEMENT_SPEED = speeds[MOVEMENT_SPEED_INDEX];
-        }
-        if(startPin == 1){
-            sleep(5);
-            start2 = 1;
+            
             if(startPin == 1){
-                start = 1;
-
+                sleep(5);
+                if(startPin == 1){
+                    start = 1;
+        
+                }
             }
+
+            if(modePin == 1){
+                mode++;
+                if(mode > 1){
+                    mode = 0;
+                }
+            }
+            
+            amountLeds = binary(amount);
+
+            sleep(4);
+
+        }
+        amountLeds = binary(0);
+
+        
+
+
+        if(mode == 0){
+            for (int i = 0; i < 3; i++) { //starting
+                ledsFrom = 0b000;
+                ledsTo = 0b000;
+                ThisThread::sleep_for(BLINKING_RATE);
+                ledsFrom = 0b111;
+                ledsTo = 0b111;
+                ThisThread::sleep_for(BLINKING_RATE);
+            }
+            ledsFrom = 0b000;
+            ledsTo = 0b000;
+            ThisThread::sleep_for(BLINKING_RATE);
+
+
+            int count = pow(2, amount);
+            moveHanoi(amount, 1, 3, 2, MOVEMENT_SPEED, count);
+            amountLeds = binary(10);
+
+
+            for (int i = 0; i < 5; i++) { //ending
+                ledsFrom = 0b000;
+                ledsTo = 0b000;
+                ThisThread::sleep_for(BLINKING_RATE);
+                ledsFrom = 0b010;
+                ledsTo = 0b010;
+                ThisThread::sleep_for(BLINKING_RATE);
+            }
+            ledsFrom = 0b000;
+            ledsTo = 0b000;
+            amountLeds = binary(0);
+            sevenDigit = sevenDigitBinary(0);
+        }else if(mode == 1){
+            for(int i = 0; i < usercount; i++){ //for every user
+                while(startmulti == 0){
+                    if(startPin == 1){ // start button
+                        sleep(5);
+                        if(startPin == 1){
+                            startmulti = 1;
+                        }
+                    }
+                }
+
+                sleep(30);
+                Timer timer;
+                timer.start();
+                ledOn(i);
+                while(startPin == 0){
+                    
+                }
+                timer.stop();
+            
+                users[i] = timer.elapsed_time().count();
+                ledOff();
+            }
+            int winner = 0;
+            if(users[0] != 0 && users[0] < users[1] && (users[0] < users[2] || users[2] == 0)) winner = 0;
+            if(users[1] != 0 && users[1] < users[0] && (users[1] < users[2] || users[2] == 0)) winner = 1;
+            if(users[2] != 0 && users[2] < users[0] && users[2] < users[1]) winner = 2;
+            switch(winner){
+                case 0: 
+                    for (int i = 0; i < 3; i++) { //starting
+                        ledsFrom = 0b000;
+                        ledsTo = 0b000;
+                        ThisThread::sleep_for(BLINKING_RATE);
+                        ledsFrom = 0b100;
+                        ledsTo = 0b100;
+                        ThisThread::sleep_for(BLINKING_RATE);
+                    }
+                    break;
+                case 1: 
+                    for (int i = 0; i < 3; i++) { //starting
+                        ledsFrom = 0b000;
+                        ledsTo = 0b000;
+                        ThisThread::sleep_for(BLINKING_RATE);
+                        ledsFrom = 0b010;
+                        ledsTo = 0b010;
+                        ThisThread::sleep_for(BLINKING_RATE);
+                    }
+                    break;
+                case 2: 
+                    for (int i = 0; i < 3; i++) { //starting
+                        ledsFrom = 0b000;
+                        ledsTo = 0b000;
+                        ThisThread::sleep_for(BLINKING_RATE);
+                        ledsFrom = 0b001;
+                        ledsTo = 0b001;
+                        ThisThread::sleep_for(BLINKING_RATE);
+                    }
+                    break;
+            }
+
+            
         }
         
-        amountLeds = binary(amount);
 
-        //sleep(MOVEMENT_SPEED);
-        sleep(6);
-        //speedLED = !speedLED;
+       
 
-    }
-    amountLeds = binary(0);
-    speedLED = 0;
-
-    for (int i = 0; i < 5; i++) {
-        ledsFrom = 0b000;
-        ledsTo = 0b000;
-        ThisThread::sleep_for(BLINKING_RATE);
-        ledsFrom = 0b111;
-        ledsTo = 0b111;
-        ThisThread::sleep_for(BLINKING_RATE);
-    }
-    int count = pow(2, amount);
-    moveHanoi(amount, 1, 3, 2, MOVEMENT_SPEED, count);
-    /*int count = 0;
-    for (int i = 0; i < sizeof(data) / sizeof(int); i++) {
-        if (count == 2) {
-            ledsFrom = 0b000;
-        ledsTo = 0b000;
-            ThisThread::sleep_for(BLINKING_RATE);//sleep(MOVEMENT_SPEED);
-            count = 0;
-        }
-        leds = data[i];
-        ThisThread::sleep_for(BLINKING_RATE);//sleep(MOVEMENT_SPEED);
-        count++;
-    }*/
-
-    while (true) {
-        amountLeds = binary(10);
-        ledsFrom = 0b000;
-        ledsTo = 0b000;
-        ThisThread::sleep_for(BLINKING_RATE);
-        ledsFrom = 0b010;
-        ledsTo = 0b010;
-        ThisThread::sleep_for(BLINKING_RATE);
+        ThisThread::sleep_for(5000ms);
     }
 }

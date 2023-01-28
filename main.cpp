@@ -187,10 +187,15 @@ int main() {
         
         amountLeds = binary(0);
         while (start == 0) {
-
+            if(modePin == 1){
+                mode++;
+                if(mode > 1){
+                    mode = 0;
+                }
+            }
 
             if(mode == 0){ //singleplayer
-
+                ledOn(0);
 
                 
                 sevenDigit = sevenDigitBinary(MOVEMENT_SPEED_INDEX+1);
@@ -217,18 +222,18 @@ int main() {
                 }
 
 
+                amountLeds = binary(amount);
 
             }else if(mode == 1){ //multiplayer
-
-                amountLeds = binary(0);
-
+                ledOn(1);
                 if(speedPin == 1){
                     usercount += 1;
                     if(usercount > 3){
                         usercount = 2;
                     }
-                    sevenDigit = sevenDigitBinary(usercount+1);
                 }
+                amountLeds = binary(0);
+                sevenDigit = sevenDigitBinary(usercount);
             }
             
             if(startPin == 1){
@@ -239,14 +244,8 @@ int main() {
                 }
             }
 
-            if(modePin == 1){
-                mode++;
-                if(mode > 1){
-                    mode = 0;
-                }
-            }
             
-            amountLeds = binary(amount);
+            
 
             sleep(4);
 
@@ -289,6 +288,7 @@ int main() {
             sevenDigit = sevenDigitBinary(0);
         }else if(mode == 1){
             for(int i = 0; i < usercount; i++){ //for every user
+                ledOn(i);
                 while(startmulti == 0){
                     if(startPin == 1){ // start button
                         sleep(5);
@@ -297,6 +297,8 @@ int main() {
                         }
                     }
                 }
+                startmulti = 0;
+                ledOff();
 
                 sleep(30);
                 Timer timer;
@@ -309,6 +311,7 @@ int main() {
             
                 users[i] = timer.elapsed_time().count();
                 ledOff();
+                sleep(30);
             }
             int winner = 0;
             if(users[0] != 0 && users[0] < users[1] && (users[0] < users[2] || users[2] == 0)) winner = 0;
@@ -316,7 +319,7 @@ int main() {
             if(users[2] != 0 && users[2] < users[0] && users[2] < users[1]) winner = 2;
             switch(winner){
                 case 0: 
-                    for (int i = 0; i < 3; i++) { //starting
+                    for (int i = 0; i < 10; i++) { //starting
                         ledsFrom = 0b000;
                         ledsTo = 0b000;
                         ThisThread::sleep_for(BLINKING_RATE);
@@ -326,7 +329,7 @@ int main() {
                     }
                     break;
                 case 1: 
-                    for (int i = 0; i < 3; i++) { //starting
+                    for (int i = 0; i < 10; i++) { //starting
                         ledsFrom = 0b000;
                         ledsTo = 0b000;
                         ThisThread::sleep_for(BLINKING_RATE);
@@ -336,7 +339,7 @@ int main() {
                     }
                     break;
                 case 2: 
-                    for (int i = 0; i < 3; i++) { //starting
+                    for (int i = 0; i < 10; i++) { //starting
                         ledsFrom = 0b000;
                         ledsTo = 0b000;
                         ThisThread::sleep_for(BLINKING_RATE);

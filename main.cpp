@@ -23,7 +23,7 @@ DigitalIn speedPin(PC_6);
 DigitalIn startPin(PA_12);
 int RecursiveCount = 0;
 
-int progress = 0;
+int progress = 0; // not used but DO NOT DELETE THIS - BAD THINGS CAN HAPPEN
 
 void sleep(int hundred_millis){ 
     for(int i = 0; i < hundred_millis; i++){

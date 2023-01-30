@@ -51,16 +51,16 @@
 
 * Taster 3  &nbsp;>&nbsp; Start
 * Taster 4  &nbsp;>&nbsp; Modus (Single / Multi-player)
-####Ablauf
+#### Ablauf
 Nach dem Start Blinken alle LEDs 3x auf. Danach wird der Algorithmus gestartet. Am Ende Blinken die LEDs, auf dessen Position die Scheiben liegen.
 Während des Spiels, muss die Scheibe von der Position der Roten LED auf die Position der grünen LED verschoben werden.
-##Multiplayer
+## Multiplayer
 * Taster 1 &nbsp;>&nbsp; unbenutzt
 * Taster 2 &nbsp;>&nbsp; Spieleranzahl
 * Taster 3 &nbsp;>&nbsp; Start
 * Taster 4  &nbsp;>&nbsp; Modus (Single / Multi-player)
 
-####Ablauf
+#### Ablauf
 Sobald die Einstellungen durch Start bestätigt wurden, fängt der erste Spieler an. Hier muss der Start button erneut für 500ms gedrückt werden. Nach 3 Sekunden leuchten alle LEDs auf und das Spiel beginnt. Hier muss nun der Algorithmus selbst gelöst werden. Sobald alle Scheiben in richtiger Position in der Mitte liegen, muss auf den Startbutton gedrückt werden. Danach ist der zweite Spieler dran. Sollten die Einstellungen für 3 Spieler getroffen worden sein, hat dieser danach auch noch seinen Zug. Am Ende wird der Gewinner ermittelt und die LEDs des Gewinners blinken.
 
 

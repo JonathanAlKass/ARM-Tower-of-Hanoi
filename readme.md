@@ -54,6 +54,8 @@
 #### Ablauf
 Nach dem Start Blinken alle LEDs 3x auf. Danach wird der Algorithmus gestartet. Am Ende Blinken die LEDs, auf dessen Position die Scheiben liegen.
 Während des Spiels, muss die Scheibe von der Position der Roten LED auf die Position der grünen LED verschoben werden.
+<br>
+<br>
 ## Multiplayer
 * Taster 1 &nbsp;>&nbsp; unbenutzt
 * Taster 2 &nbsp;>&nbsp; Spieleranzahl
